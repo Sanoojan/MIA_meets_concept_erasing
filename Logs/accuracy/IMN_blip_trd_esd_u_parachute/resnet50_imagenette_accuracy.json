@@ -1,0 +1,138 @@
+{
+  "summary": [
+    {
+      "eval_root": "IMN_blip_trd_esd_u_parachute",
+      "num_images": 1000,
+      "top1_accuracy": 0.706,
+      "top5_accuracy": 0.859,
+      "target_confidence": 0.2962546756187658,
+      "erase_concept": "parachute",
+      "erase_top1_accuracy": 0.18,
+      "other_top1_accuracy": 0.7644444444444445,
+      "erase_num_images": 100,
+      "other_num_images": 900
+    }
+  ],
+  "per_class": [
+    {
+      "eval_root": "IMN_blip_trd_esd_u_parachute",
+      "wnid": "n01440764",
+      "class_name": "tench",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 98,
+      "top5_correct": 100,
+      "top1_accuracy": 0.98,
+      "top5_accuracy": 1.0,
+      "target_confidence": 0.4431344876624644
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_parachute",
+      "wnid": "n02102040",
+      "class_name": "english springer",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 99,
+      "top5_correct": 100,
+      "top1_accuracy": 0.99,
+      "top5_accuracy": 1.0,
+      "target_confidence": 0.41023302406072615
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_parachute",
+      "wnid": "n02979186",
+      "class_name": "cassette player",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 7,
+      "top5_correct": 95,
+      "top1_accuracy": 0.07,
+      "top5_accuracy": 0.95,
+      "target_confidence": 0.10098810796160251
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_parachute",
+      "wnid": "n03000684",
+      "class_name": "chain saw",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 52,
+      "top5_correct": 56,
+      "top1_accuracy": 0.52,
+      "top5_accuracy": 0.56,
+      "target_confidence": 0.20754755059300806
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_parachute",
+      "wnid": "n03028079",
+      "class_name": "church",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 71,
+      "top5_correct": 95,
+      "top1_accuracy": 0.71,
+      "top5_accuracy": 0.95,
+      "target_confidence": 0.24782408705912531
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_parachute",
+      "wnid": "n03394916",
+      "class_name": "french horn",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 74,
+      "top5_correct": 87,
+      "top1_accuracy": 0.74,
+      "top5_accuracy": 0.87,
+      "target_confidence": 0.30613941221265123
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_parachute",
+      "wnid": "n03417042",
+      "class_name": "garbage truck",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 99,
+      "top5_correct": 100,
+      "top1_accuracy": 0.99,
+      "top5_accuracy": 1.0,
+      "target_confidence": 0.42626081481575967
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_parachute",
+      "wnid": "n03425413",
+      "class_name": "gas pump",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 99,
+      "top5_correct": 99,
+      "top1_accuracy": 0.99,
+      "top5_accuracy": 0.99,
+      "target_confidence": 0.34636832114018035
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_parachute",
+      "wnid": "n03445777",
+      "class_name": "golf ball",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 89,
+      "top5_correct": 95,
+      "top1_accuracy": 0.89,
+      "top5_accuracy": 0.95,
+      "target_confidence": 0.3929013843677239
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_parachute",
+      "wnid": "n03888257",
+      "class_name": "parachute",
+      "is_erased_concept": true,
+      "num_images": 100,
+      "top1_correct": 18,
+      "top5_correct": 32,
+      "top1_accuracy": 0.18,
+      "top5_accuracy": 0.32,
+      "target_confidence": 0.081149566314416
+    }
+  ]
+}

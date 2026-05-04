@@ -16,97 +16,6 @@ import os
 from typing import Iterable, Callable, Optional, Any, Tuple, List
 from omegaconf import OmegaConf
 import argparse
-from safetensors.torch import load_file
-from torchvision.datasets import ImageFolder
-from torch.utils.data import Subset
-
-IMAGENETTE_LABELS = {
-    "n01440764": "a photo of a tench",
-    "n02102040": "a photo of an english springer",
-    "n02979186": "a photo of a cassette player",
-    "n03000684": "a photo of a chain saw",
-    "n03028079": "a photo of a church",
-    "n03394916": "a photo of a french horn",
-    "n03417042": "a photo of a garbage truck",
-    "n03425413": "a photo of a gas pump",
-    "n03445777": "a photo of a golf ball",
-    "n03888257": "a photo of a parachute",
-}
-def load_imagenette_datasets(dataset_root, num_samples=500):
-    resolution = 512
-
-    transform = transforms.Compose([
-        transforms.Resize(resolution, interpolation=transforms.InterpolationMode.BILINEAR),
-        transforms.CenterCrop(resolution),
-        transforms.ToTensor(),
-        transforms.Normalize([0.5], [0.5]),
-    ])
-
-    train_raw = ImageFolder(
-        root=os.path.join(dataset_root, "train"),
-        transform=transform
-    )
-
-    val_raw = ImageFolder(
-        root=os.path.join(dataset_root, "val"),
-        transform=transform
-    )
-    train_raw = Subset(train_raw, list(range(num_samples)))
-    val_raw = Subset(val_raw, list(range(num_samples)))
-
-    class WrappedDataset(torch.utils.data.Dataset):
-        def __init__(self, dataset):
-            self.dataset = dataset
-
-            # 🔥 Get original ImageFolder
-            base_dataset = dataset.dataset if isinstance(dataset, torch.utils.data.Subset) else dataset
-            self.classes = base_dataset.classes  # WordNet IDs
-
-            # Precompute tokenized captions
-            readable_classes = [
-                IMAGENETTE_LABELS[cls] for cls in self.classes
-            ]
-
-            inputs = tokenizer(
-                readable_classes,
-                max_length=tokenizer.model_max_length,
-                padding="max_length",
-                truncation=True,
-                return_tensors="pt"
-            )
-
-            self.class_input_ids = inputs.input_ids
-
-        def __len__(self):
-            return len(self.dataset)
-
-        def __getitem__(self, idx):
-            img, label = self.dataset[idx]
-            input_ids = self.class_input_ids[label]
-
-            return {
-                "pixel_values": img,
-                "input_ids": input_ids
-            }
-
-    train_dataset = WrappedDataset(train_raw)
-    val_dataset = WrappedDataset(val_raw)
-
-    train_loader = torch.utils.data.DataLoader(
-        train_dataset,
-        batch_size=20,
-        shuffle=False,
-        collate_fn=collate_fn
-    )
-
-    val_loader = torch.utils.data.DataLoader(
-        val_dataset,
-        batch_size=20,
-        shuffle=False,
-        collate_fn=collate_fn
-    )
-
-    return train_dataset, val_dataset, train_loader, val_loader
 
 def tokenize_captions(examples, is_train=True):
     captions = []
@@ -351,45 +260,6 @@ def load_pipeline(ckpt_path, device='cuda:0'):
     pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
     pipe = pipe.to(device)
     return pipe
-def load_pipeline_unet(ckpt_path, unet_path, base_model="runwayml/stable-diffusion-v1-5", device="cuda"):
-    
-    if os.path.exists(os.path.join(unet_path, "diffusion_pytorch_model.safetensors")):
-    
-        # Load base pipeline
-        pipe = StableDiffusionPipeline.from_pretrained(
-            base_model,
-            torch_dtype=torch.float32
-        )
-
-        # 🔥 FORCE USE YOUR LOCAL DDIM SCHEDULER
-        pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
-
-        # Load UNet weights
-        if os.path.exists(os.path.join(unet_path, "diffusion_pytorch_model.safetensors")):
-            unet = UNet2DConditionModel.from_pretrained(
-                base_model,
-                subfolder="unet",
-                torch_dtype=torch.float32
-            )
-
-            state_dict = load_file(
-                os.path.join(unet_path, "diffusion_pytorch_model.safetensors")
-            )
-
-            unet.load_state_dict(state_dict)
-            pipe.unet = unet
-
-        pipe = pipe.to(device)
-    
-    else:
-        print(f"No safetensors found: {unet_path}. Use previous loading method.") 
-        pipe = StableDiffusionPipeline.from_pretrained(ckpt_path, torch_dtype=torch.float32)
-        pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
-        pipe = pipe.to(device)
-        return pipe   
-    
-    return pipe
-
 
 def decode_latents(vae, latents):
     latents = 1 / 0.18215 * latents
@@ -420,7 +290,6 @@ def get_reverse_denoise_results(pipe, dataloader, prefix='member'):
     weight_dtype = torch.float32
     mean_l2 = 0
     scores = []
-    all_scores = None
     for batch_idx, batch in enumerate(tqdm.tqdm(dataloader)):
         # Convert images to latent space
         pixel_values = batch["pixel_values"].to(weight_dtype)
@@ -435,29 +304,11 @@ def get_reverse_denoise_results(pipe, dataloader, prefix='member'):
             pipe(prompt=None, latents=latents, text_embeddings=encoder_hidden_states, guidance_scale=1.0)
 
         score = ((denoising_results[-15] - reverse_results[14]) ** 2).sum()
-        
-        reverse_denoising_results= denoising_results[::-1]
-        score_all_levels = [
-            ((reverse_denoising_results[i] - reverse_results[i]) ** 2)
-                .sum(dim=(1, 2, 3)).detach().cpu()   # sum over C,H,W only
-            for i in range(len(reverse_denoising_results))
-        ]
-        score_all_levels = torch.stack(score_all_levels, dim=0)  
-        if all_scores is None:
-            all_scores = score_all_levels
-        else:
-            all_scores = torch.cat([all_scores, score_all_levels], dim=1)
-        # score_all_levels = torch.stack(score_all_levels, dim=1)
-
-        
-        
         scores.append(score.reshape(-1, 1))
         mean_l2 += score
         print(f'[{batch_idx}/{len(dataloader)}] mean l2-sum: {mean_l2 / (batch_idx + 1):.8f}')
 
-        
-   
-    return torch.concat(scores).reshape(-1), all_scores
+    return torch.concat(scores).reshape(-1)
 
 
 def main(args):
@@ -466,59 +317,42 @@ def main(args):
     elif args.dataset == 'laion':
         _, _, _, test_loader = load_coco_datasets(args.dataset_root)
         _, train_loader = load_laion_dataset(args.dataset_root)
-    elif args.dataset == 'imagenette':
-        _, _, train_loader, test_loader = load_imagenette_datasets(args.dataset_root)
+    
     else:
         raise NotImplementedError
 
-    pipe = load_pipeline_unet(args.ckpt_path, args.unet_path, device=args.device)
+    pipe = load_pipeline(args.ckpt_path, args.device)
 
-    member_scores,member_all_scores = get_reverse_denoise_results(pipe, train_loader)
-    nonmember_scores,nonmember_all_scores = get_reverse_denoise_results(pipe, test_loader)
+    member_scores = get_reverse_denoise_results(pipe, train_loader)
+    nonmember_scores = get_reverse_denoise_results(pipe, test_loader)
 
-    def find_AUC(member_scores, nonmember_scores):
-        min_score = min(member_scores.min(), nonmember_scores.min())
-        max_score = max(member_scores.max(), nonmember_scores.max())
+    min_score = min(member_scores.min(), nonmember_scores.min())
+    max_score = max(member_scores.max(), nonmember_scores.max())
 
-        TPR_list = []
-        FPR_list = []
+    TPR_list = []
+    FPR_list = []
 
-        total = member_scores.size(0) + nonmember_scores.size(0)
+    total = member_scores.size(0) + nonmember_scores.size(0)
 
-        for threshold in torch.range(min_score, max_score, (max_score - min_score) / 10000):
-            acc = ((member_scores <= threshold).sum() + (nonmember_scores > threshold).sum()) / total
+    for threshold in torch.range(min_score, max_score, (max_score - min_score) / 10000):
+        acc = ((member_scores <= threshold).sum() + (nonmember_scores > threshold).sum()) / total
 
-            TP = (member_scores <= threshold).sum()
-            TN = (nonmember_scores > threshold).sum()
-            FP = (nonmember_scores <= threshold).sum()
-            FN = (member_scores > threshold).sum()
+        TP = (member_scores <= threshold).sum()
+        TN = (nonmember_scores > threshold).sum()
+        FP = (nonmember_scores <= threshold).sum()
+        FN = (member_scores > threshold).sum()
 
-            TPR = TP / (TP + FN)
-            FPR = FP / (FP + TN)
+        TPR = TP / (TP + FN)
+        FPR = FP / (FP + TN)
 
-            TPR_list.append(TPR.item())
-            FPR_list.append(FPR.item())
+        TPR_list.append(TPR.item())
+        FPR_list.append(FPR.item())
 
-            # print(f'Score threshold = {threshold:.16f} \t ASR: {acc:.8f} \t TPR: {TPR:.8f} \t FPR: {FPR:.8f}')
-        auc = metrics.auc(np.asarray(FPR_list), np.asarray(TPR_list))
-        print(f'AUROC: {auc}')
-        return auc
-    
-    original_auc = find_AUC(member_scores, nonmember_scores)
-    print(f'AUROC for Original: {original_auc}')
+        print(f'Score threshold = {threshold:.16f} \t ASR: {acc:.8f} \t TPR: {TPR:.8f} \t FPR: {FPR:.8f}')
+    auc = metrics.auc(np.asarray(FPR_list), np.asarray(TPR_list))
+    print(f'AUROC: {auc}')
 
-    
-    for i in range(member_all_scores.shape[0]):
-        auc=find_AUC(member_all_scores[i], nonmember_all_scores[i])
-        print(f'AUROC for Level {i}: {auc}')
-    avg_member_all_scores = member_all_scores.mean(dim=0)
-    avg_nonmember_all_scores = nonmember_all_scores.mean(dim=0)
-    auc=find_AUC(avg_member_all_scores, avg_nonmember_all_scores)
-    print(f'AUROC for Average All Levels: {auc}')
 
-    # save member_all_scores and nonmember_all_scores
-    torch.save(member_all_scores, os.path.join('/egr/research-sprintai/baliahsa/projects/SecMI-LDM/Analysis', 'member_all_scores.pt'))
-    torch.save(nonmember_all_scores, os.path.join('/egr/research-sprintai/baliahsa/projects/SecMI-LDM/Analysis', 'nonmember_all_scores.pt'))
 
 def fix_seed(seed):
     torch.manual_seed(seed)
@@ -531,12 +365,10 @@ def fix_seed(seed):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', default='laion',
-                    choices=['pokemon', 'laion', 'imagenette'])
+    parser.add_argument('--dataset', default='pokemon', choices=['pokemon', 'laion'])
     parser.add_argument('--dataset-root', default='dataset/Datasets-Vision/SecMI-LDM-Data/datasets', type=str)
     parser.add_argument('--seed', type=int, default=10)
-    parser.add_argument('--ckpt-path', type=str, default='runwayml/stable-diffusion-v1-5')
-    parser.add_argument('--unet-path', type=str, default='')
+    parser.add_argument('--ckpt-path', type=str, default='./checkpoints/sd-pokemon-checkpoint')
     parser.add_argument('--device', type=str, default='cuda')
     args = parser.parse_args()
 

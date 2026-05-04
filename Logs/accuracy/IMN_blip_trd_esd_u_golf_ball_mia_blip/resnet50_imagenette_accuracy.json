@@ -1,0 +1,138 @@
+{
+  "summary": [
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball_mia_blip",
+      "num_images": 960,
+      "top1_accuracy": 0.371875,
+      "top5_accuracy": 0.5125,
+      "target_confidence": 0.1205966085769281,
+      "erase_concept": "golf ball",
+      "erase_top1_accuracy": 0.09,
+      "other_top1_accuracy": 0.4046511627906977,
+      "erase_num_images": 100,
+      "other_num_images": 860
+    }
+  ],
+  "per_class": [
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball_mia_blip",
+      "wnid": "n01440764",
+      "class_name": "tench",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 49,
+      "top5_correct": 57,
+      "top1_accuracy": 0.49,
+      "top5_accuracy": 0.57,
+      "target_confidence": 0.2061880121784634
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball_mia_blip",
+      "wnid": "n02102040",
+      "class_name": "english springer",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 65,
+      "top5_correct": 71,
+      "top1_accuracy": 0.65,
+      "top5_accuracy": 0.71,
+      "target_confidence": 0.21189973917600582
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball_mia_blip",
+      "wnid": "n02979186",
+      "class_name": "cassette player",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 0,
+      "top5_correct": 10,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.1,
+      "target_confidence": 0.007821690392156598
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball_mia_blip",
+      "wnid": "n03000684",
+      "class_name": "chain saw",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 18,
+      "top5_correct": 33,
+      "top1_accuracy": 0.18,
+      "top5_accuracy": 0.33,
+      "target_confidence": 0.04496349083841778
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball_mia_blip",
+      "wnid": "n03028079",
+      "class_name": "church",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 57,
+      "top5_correct": 92,
+      "top1_accuracy": 0.57,
+      "top5_accuracy": 0.92,
+      "target_confidence": 0.17872455111937596
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball_mia_blip",
+      "wnid": "n03394916",
+      "class_name": "french horn",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 39,
+      "top5_correct": 52,
+      "top1_accuracy": 0.39,
+      "top5_accuracy": 0.52,
+      "target_confidence": 0.10973601306817728
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball_mia_blip",
+      "wnid": "n03417042",
+      "class_name": "garbage truck",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 69,
+      "top5_correct": 85,
+      "top1_accuracy": 0.69,
+      "top5_accuracy": 0.85,
+      "target_confidence": 0.22299228055402637
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball_mia_blip",
+      "wnid": "n03425413",
+      "class_name": "gas pump",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 48,
+      "top5_correct": 72,
+      "top1_accuracy": 0.48,
+      "top5_accuracy": 0.72,
+      "target_confidence": 0.15099860952235758
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball_mia_blip",
+      "wnid": "n03445777",
+      "class_name": "golf ball",
+      "is_erased_concept": true,
+      "num_images": 100,
+      "top1_correct": 9,
+      "top5_correct": 15,
+      "top1_accuracy": 0.09,
+      "top5_accuracy": 0.15,
+      "target_confidence": 0.01691133171261754
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball_mia_blip",
+      "wnid": "n03888257",
+      "class_name": "parachute",
+      "is_erased_concept": false,
+      "num_images": 60,
+      "top1_correct": 3,
+      "top5_correct": 5,
+      "top1_accuracy": 0.05,
+      "top5_accuracy": 0.08333333333333333,
+      "target_confidence": 0.012486206294852309
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+eval_root,wnid,class_name,is_erased_concept,num_images,top1_correct,top5_correct,top1_accuracy,top5_accuracy,target_confidence
+sd_imagenette_full,n01440764,tench,False,100,100,100,1.0,1.0,0.46074339747428894
+sd_imagenette_full,n02102040,english springer,False,100,100,100,1.0,1.0,0.4217562557756901
+sd_imagenette_full,n02979186,cassette player,False,100,9,100,0.09,1.0,0.13410545863211154
+sd_imagenette_full,n03000684,chain saw,False,100,100,100,1.0,1.0,0.489811789393425
+sd_imagenette_full,n03028079,church,False,100,95,100,0.95,1.0,0.5051435849815608
+sd_imagenette_full,n03394916,french horn,False,100,100,100,1.0,1.0,0.5407796031236649
+sd_imagenette_full,n03417042,garbage truck,False,100,100,100,1.0,1.0,0.4624189746752381
+sd_imagenette_full,n03425413,gas pump,False,100,100,100,1.0,1.0,0.34222687751054764
+sd_imagenette_full,n03445777,golf ball,True,100,100,100,1.0,1.0,0.47365605652332304
+sd_imagenette_full,n03888257,parachute,False,100,61,82,0.61,0.82,0.29095809818798446

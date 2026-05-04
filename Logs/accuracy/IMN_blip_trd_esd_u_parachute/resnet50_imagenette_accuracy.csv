@@ -1,0 +1,11 @@
+eval_root,wnid,class_name,is_erased_concept,num_images,top1_correct,top5_correct,top1_accuracy,top5_accuracy,target_confidence
+IMN_blip_trd_esd_u_parachute,n01440764,tench,False,100,98,100,0.98,1.0,0.4431344876624644
+IMN_blip_trd_esd_u_parachute,n02102040,english springer,False,100,99,100,0.99,1.0,0.41023302406072615
+IMN_blip_trd_esd_u_parachute,n02979186,cassette player,False,100,7,95,0.07,0.95,0.10098810796160251
+IMN_blip_trd_esd_u_parachute,n03000684,chain saw,False,100,52,56,0.52,0.56,0.20754755059300806
+IMN_blip_trd_esd_u_parachute,n03028079,church,False,100,71,95,0.71,0.95,0.24782408705912531
+IMN_blip_trd_esd_u_parachute,n03394916,french horn,False,100,74,87,0.74,0.87,0.30613941221265123
+IMN_blip_trd_esd_u_parachute,n03417042,garbage truck,False,100,99,100,0.99,1.0,0.42626081481575967
+IMN_blip_trd_esd_u_parachute,n03425413,gas pump,False,100,99,99,0.99,0.99,0.34636832114018035
+IMN_blip_trd_esd_u_parachute,n03445777,golf ball,False,100,89,95,0.89,0.95,0.3929013843677239
+IMN_blip_trd_esd_u_parachute,n03888257,parachute,True,100,18,32,0.18,0.32,0.081149566314416

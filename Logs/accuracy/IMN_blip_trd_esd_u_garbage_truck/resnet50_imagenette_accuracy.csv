@@ -1,0 +1,11 @@
+eval_root,wnid,class_name,is_erased_concept,num_images,top1_correct,top5_correct,top1_accuracy,top5_accuracy,target_confidence
+IMN_blip_trd_esd_u_garbage_truck,n01440764,tench,False,100,30,31,0.3,0.31,0.10536227552685887
+IMN_blip_trd_esd_u_garbage_truck,n02102040,english springer,False,100,52,64,0.52,0.64,0.20238432854646818
+IMN_blip_trd_esd_u_garbage_truck,n02979186,cassette player,False,100,3,27,0.03,0.27,0.024451606910006377
+IMN_blip_trd_esd_u_garbage_truck,n03000684,chain saw,False,100,4,7,0.04,0.07,0.0143610768612416
+IMN_blip_trd_esd_u_garbage_truck,n03028079,church,False,100,20,39,0.2,0.39,0.055934709753491914
+IMN_blip_trd_esd_u_garbage_truck,n03394916,french horn,False,100,16,19,0.16,0.19,0.05520266079722205
+IMN_blip_trd_esd_u_garbage_truck,n03417042,garbage truck,True,100,0,3,0.0,0.03,0.0030275107847410254
+IMN_blip_trd_esd_u_garbage_truck,n03425413,gas pump,False,100,15,21,0.15,0.21,0.04741470525150362
+IMN_blip_trd_esd_u_garbage_truck,n03445777,golf ball,False,100,8,12,0.08,0.12,0.027369095167086924
+IMN_blip_trd_esd_u_garbage_truck,n03888257,parachute,False,100,0,0,0.0,0.0,0.0008962204499403015

@@ -1,0 +1,138 @@
+{
+  "summary": [
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball",
+      "num_images": 1000,
+      "top1_accuracy": 0.378,
+      "top5_accuracy": 0.54,
+      "target_confidence": 0.14171968818694586,
+      "erase_concept": "golf ball",
+      "erase_top1_accuracy": 0.03,
+      "other_top1_accuracy": 0.4166666666666667,
+      "erase_num_images": 100,
+      "other_num_images": 900
+    }
+  ],
+  "per_class": [
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball",
+      "wnid": "n01440764",
+      "class_name": "tench",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 68,
+      "top5_correct": 80,
+      "top1_accuracy": 0.68,
+      "top5_accuracy": 0.8,
+      "target_confidence": 0.29328836994158336
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball",
+      "wnid": "n02102040",
+      "class_name": "english springer",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 66,
+      "top5_correct": 94,
+      "top1_accuracy": 0.66,
+      "top5_accuracy": 0.94,
+      "target_confidence": 0.242432713121525
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball",
+      "wnid": "n02979186",
+      "class_name": "cassette player",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 0,
+      "top5_correct": 27,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.27,
+      "target_confidence": 0.020790277169726323
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball",
+      "wnid": "n03000684",
+      "class_name": "chain saw",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 47,
+      "top5_correct": 59,
+      "top1_accuracy": 0.47,
+      "top5_accuracy": 0.59,
+      "target_confidence": 0.19593252582562853
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball",
+      "wnid": "n03028079",
+      "class_name": "church",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 11,
+      "top5_correct": 50,
+      "top1_accuracy": 0.11,
+      "top5_accuracy": 0.5,
+      "target_confidence": 0.03582725907501299
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball",
+      "wnid": "n03394916",
+      "class_name": "french horn",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 29,
+      "top5_correct": 33,
+      "top1_accuracy": 0.29,
+      "top5_accuracy": 0.33,
+      "target_confidence": 0.08118529005543679
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball",
+      "wnid": "n03417042",
+      "class_name": "garbage truck",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 61,
+      "top5_correct": 83,
+      "top1_accuracy": 0.61,
+      "top5_accuracy": 0.83,
+      "target_confidence": 0.2188163729791995
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball",
+      "wnid": "n03425413",
+      "class_name": "gas pump",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 83,
+      "top5_correct": 92,
+      "top1_accuracy": 0.83,
+      "top5_accuracy": 0.92,
+      "target_confidence": 0.30105550958076494
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball",
+      "wnid": "n03445777",
+      "class_name": "golf ball",
+      "is_erased_concept": true,
+      "num_images": 100,
+      "top1_correct": 3,
+      "top5_correct": 7,
+      "top1_accuracy": 0.03,
+      "top5_accuracy": 0.07,
+      "target_confidence": 0.008539989925047849
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_golf_ball",
+      "wnid": "n03888257",
+      "class_name": "parachute",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 10,
+      "top5_correct": 15,
+      "top1_accuracy": 0.1,
+      "top5_accuracy": 0.15,
+      "target_confidence": 0.019328574195533292
+    }
+  ]
+}

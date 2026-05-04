@@ -1,0 +1,138 @@
+{
+  "summary": [
+    {
+      "eval_root": "esd_garbage_truck",
+      "num_images": 100,
+      "top1_accuracy": 0.73,
+      "top5_accuracy": 0.86,
+      "target_confidence": 0.34874744290369564,
+      "erase_concept": "garbage truck",
+      "erase_top1_accuracy": 0.2,
+      "other_top1_accuracy": 0.7888888888888889,
+      "erase_num_images": 10,
+      "other_num_images": 90
+    }
+  ],
+  "per_class": [
+    {
+      "eval_root": "esd_garbage_truck",
+      "wnid": "n01440764",
+      "class_name": "tench",
+      "is_erased_concept": false,
+      "num_images": 10,
+      "top1_correct": 10,
+      "top5_correct": 10,
+      "top1_accuracy": 1.0,
+      "top5_accuracy": 1.0,
+      "target_confidence": 0.4660441935062408
+    },
+    {
+      "eval_root": "esd_garbage_truck",
+      "wnid": "n02102040",
+      "class_name": "english springer",
+      "is_erased_concept": false,
+      "num_images": 10,
+      "top1_correct": 10,
+      "top5_correct": 10,
+      "top1_accuracy": 1.0,
+      "top5_accuracy": 1.0,
+      "target_confidence": 0.41740337908267977
+    },
+    {
+      "eval_root": "esd_garbage_truck",
+      "wnid": "n02979186",
+      "class_name": "cassette player",
+      "is_erased_concept": false,
+      "num_images": 10,
+      "top1_correct": 1,
+      "top5_correct": 10,
+      "top1_accuracy": 0.1,
+      "top5_accuracy": 1.0,
+      "target_confidence": 0.18348737321794034
+    },
+    {
+      "eval_root": "esd_garbage_truck",
+      "wnid": "n03000684",
+      "class_name": "chain saw",
+      "is_erased_concept": false,
+      "num_images": 10,
+      "top1_correct": 10,
+      "top5_correct": 10,
+      "top1_accuracy": 1.0,
+      "top5_accuracy": 1.0,
+      "target_confidence": 0.5365400165319443
+    },
+    {
+      "eval_root": "esd_garbage_truck",
+      "wnid": "n03028079",
+      "class_name": "church",
+      "is_erased_concept": false,
+      "num_images": 10,
+      "top1_correct": 9,
+      "top5_correct": 10,
+      "top1_accuracy": 0.9,
+      "top5_accuracy": 1.0,
+      "target_confidence": 0.44867238253355024
+    },
+    {
+      "eval_root": "esd_garbage_truck",
+      "wnid": "n03394916",
+      "class_name": "french horn",
+      "is_erased_concept": false,
+      "num_images": 10,
+      "top1_correct": 10,
+      "top5_correct": 10,
+      "top1_accuracy": 1.0,
+      "top5_accuracy": 1.0,
+      "target_confidence": 0.5513709515333176
+    },
+    {
+      "eval_root": "esd_garbage_truck",
+      "wnid": "n03417042",
+      "class_name": "garbage truck",
+      "is_erased_concept": true,
+      "num_images": 10,
+      "top1_correct": 2,
+      "top5_correct": 2,
+      "top1_accuracy": 0.2,
+      "top5_accuracy": 0.2,
+      "target_confidence": 0.04175649351091124
+    },
+    {
+      "eval_root": "esd_garbage_truck",
+      "wnid": "n03425413",
+      "class_name": "gas pump",
+      "is_erased_concept": false,
+      "num_images": 10,
+      "top1_correct": 10,
+      "top5_correct": 10,
+      "top1_accuracy": 1.0,
+      "top5_accuracy": 1.0,
+      "target_confidence": 0.3701279416680336
+    },
+    {
+      "eval_root": "esd_garbage_truck",
+      "wnid": "n03445777",
+      "class_name": "golf ball",
+      "is_erased_concept": false,
+      "num_images": 10,
+      "top1_correct": 10,
+      "top5_correct": 10,
+      "top1_accuracy": 1.0,
+      "top5_accuracy": 1.0,
+      "target_confidence": 0.43096925765275956
+    },
+    {
+      "eval_root": "esd_garbage_truck",
+      "wnid": "n03888257",
+      "class_name": "parachute",
+      "is_erased_concept": false,
+      "num_images": 10,
+      "top1_correct": 1,
+      "top5_correct": 4,
+      "top1_accuracy": 0.1,
+      "top5_accuracy": 0.4,
+      "target_confidence": 0.04110243979957886
+    }
+  ]
+}

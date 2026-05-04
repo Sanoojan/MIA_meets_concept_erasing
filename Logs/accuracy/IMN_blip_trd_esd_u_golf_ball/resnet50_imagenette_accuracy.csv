@@ -1,0 +1,11 @@
+eval_root,wnid,class_name,is_erased_concept,num_images,top1_correct,top5_correct,top1_accuracy,top5_accuracy,target_confidence
+IMN_blip_trd_esd_u_golf_ball,n01440764,tench,False,100,68,80,0.68,0.8,0.29328836994158336
+IMN_blip_trd_esd_u_golf_ball,n02102040,english springer,False,100,66,94,0.66,0.94,0.242432713121525
+IMN_blip_trd_esd_u_golf_ball,n02979186,cassette player,False,100,0,27,0.0,0.27,0.020790277169726323
+IMN_blip_trd_esd_u_golf_ball,n03000684,chain saw,False,100,47,59,0.47,0.59,0.19593252582562853
+IMN_blip_trd_esd_u_golf_ball,n03028079,church,False,100,11,50,0.11,0.5,0.03582725907501299
+IMN_blip_trd_esd_u_golf_ball,n03394916,french horn,False,100,29,33,0.29,0.33,0.08118529005543679
+IMN_blip_trd_esd_u_golf_ball,n03417042,garbage truck,False,100,61,83,0.61,0.83,0.2188163729791995
+IMN_blip_trd_esd_u_golf_ball,n03425413,gas pump,False,100,83,92,0.83,0.92,0.30105550958076494
+IMN_blip_trd_esd_u_golf_ball,n03445777,golf ball,True,100,3,7,0.03,0.07,0.008539989925047849
+IMN_blip_trd_esd_u_golf_ball,n03888257,parachute,False,100,10,15,0.1,0.15,0.019328574195533292

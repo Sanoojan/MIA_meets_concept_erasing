@@ -1,0 +1,138 @@
+{
+  "summary": [
+    {
+      "eval_root": "IMN_blip_trd_esd_u_garbage_truck_mia_blip",
+      "num_images": 960,
+      "top1_accuracy": 0.19583333333333333,
+      "top5_accuracy": 0.31145833333333334,
+      "target_confidence": 0.07728069696877356,
+      "erase_concept": "garbage truck",
+      "erase_top1_accuracy": 0.05,
+      "other_top1_accuracy": 0.2127906976744186,
+      "erase_num_images": 100,
+      "other_num_images": 860
+    }
+  ],
+  "per_class": [
+    {
+      "eval_root": "IMN_blip_trd_esd_u_garbage_truck_mia_blip",
+      "wnid": "n01440764",
+      "class_name": "tench",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 20,
+      "top5_correct": 26,
+      "top1_accuracy": 0.2,
+      "top5_accuracy": 0.26,
+      "target_confidence": 0.07912456970421772
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_garbage_truck_mia_blip",
+      "wnid": "n02102040",
+      "class_name": "english springer",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 54,
+      "top5_correct": 67,
+      "top1_accuracy": 0.54,
+      "top5_accuracy": 0.67,
+      "target_confidence": 0.22313056038226933
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_garbage_truck_mia_blip",
+      "wnid": "n02979186",
+      "class_name": "cassette player",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 1,
+      "top5_correct": 12,
+      "top1_accuracy": 0.01,
+      "top5_accuracy": 0.12,
+      "target_confidence": 0.013960885623382636
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_garbage_truck_mia_blip",
+      "wnid": "n03000684",
+      "class_name": "chain saw",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 2,
+      "top5_correct": 3,
+      "top1_accuracy": 0.02,
+      "top5_accuracy": 0.03,
+      "target_confidence": 0.012375529527489562
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_garbage_truck_mia_blip",
+      "wnid": "n03028079",
+      "class_name": "church",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 11,
+      "top5_correct": 23,
+      "top1_accuracy": 0.11,
+      "top5_accuracy": 0.23,
+      "target_confidence": 0.023628441876062424
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_garbage_truck_mia_blip",
+      "wnid": "n03394916",
+      "class_name": "french horn",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 16,
+      "top5_correct": 25,
+      "top1_accuracy": 0.16,
+      "top5_accuracy": 0.25,
+      "target_confidence": 0.07022184434979863
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_garbage_truck_mia_blip",
+      "wnid": "n03417042",
+      "class_name": "garbage truck",
+      "is_erased_concept": true,
+      "num_images": 100,
+      "top1_correct": 5,
+      "top5_correct": 22,
+      "top1_accuracy": 0.05,
+      "top5_accuracy": 0.22,
+      "target_confidence": 0.01220185060868971
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_garbage_truck_mia_blip",
+      "wnid": "n03425413",
+      "class_name": "gas pump",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 34,
+      "top5_correct": 52,
+      "top1_accuracy": 0.34,
+      "top5_accuracy": 0.52,
+      "target_confidence": 0.12022831159512862
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_garbage_truck_mia_blip",
+      "wnid": "n03445777",
+      "class_name": "golf ball",
+      "is_erased_concept": false,
+      "num_images": 100,
+      "top1_correct": 45,
+      "top5_correct": 69,
+      "top1_accuracy": 0.45,
+      "top5_accuracy": 0.69,
+      "target_confidence": 0.18629467651830056
+    },
+    {
+      "eval_root": "IMN_blip_trd_esd_u_garbage_truck_mia_blip",
+      "wnid": "n03888257",
+      "class_name": "parachute",
+      "is_erased_concept": false,
+      "num_images": 60,
+      "top1_correct": 0,
+      "top5_correct": 0,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "target_confidence": 0.0012133678581449203
+    }
+  ]
+}

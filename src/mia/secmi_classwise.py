@@ -21,18 +21,19 @@ from torchvision.datasets import ImageFolder
 from torch.utils.data import Subset
 
 IMAGENETTE_LABELS = {
-    "n01440764": "a photo of a tench",
-    "n02102040": "a photo of an english springer",
-    "n02979186": "a photo of a cassette player",
-    "n03000684": "a photo of a chain saw",
-    "n03028079": "a photo of a church",
-    "n03394916": "a photo of a french horn",
-    "n03417042": "a photo of a garbage truck",
-    "n03425413": "a photo of a gas pump",
-    "n03445777": "a photo of a golf ball",
-    "n03888257": "a photo of a parachute",
+    "n03888257": "parachute",
+    "n01440764": "tench",
+    "n02102040": "english springer",
+    "n02979186": "cassette player",
+    "n03000684": "chain saw",
+    "n03028079": "church",
+    "n03394916": "french horn",
+    "n03417042": "garbage truck",
+    "n03425413": "gas pump",
+    "n03445777": "golf ball",
+    
 }
-def load_imagenette_datasets(dataset_root, num_samples=500):
+def load_imagenette_datasets(dataset_root, class_name, num_samples=100):
     resolution = 512
 
     transform = transforms.Compose([
@@ -51,62 +52,59 @@ def load_imagenette_datasets(dataset_root, num_samples=500):
         root=os.path.join(dataset_root, "val"),
         transform=transform
     )
-    train_raw = Subset(train_raw, list(range(num_samples)))
-    val_raw = Subset(val_raw, list(range(num_samples)))
+
+    # 🔥 Get class index
+    class_idx = train_raw.class_to_idx[class_name]
+
+    # Filter only that class
+    train_indices = [i for i, (_, label) in enumerate(train_raw) if label == class_idx]
+    val_indices = [i for i, (_, label) in enumerate(val_raw) if label == class_idx]
+
+    # Random sample 50 each
+    train_indices = random.sample(train_indices, min(num_samples, len(train_indices)))
+    val_indices = random.sample(val_indices, min(num_samples, len(val_indices)))
+
+    train_subset = Subset(train_raw, train_indices)
+    val_subset = Subset(val_raw, val_indices)
 
     class WrappedDataset(torch.utils.data.Dataset):
-        def __init__(self, dataset):
+        def __init__(self, dataset, class_name):
             self.dataset = dataset
 
-            # 🔥 Get original ImageFolder
-            base_dataset = dataset.dataset if isinstance(dataset, torch.utils.data.Subset) else dataset
-            self.classes = base_dataset.classes  # WordNet IDs
-
-            # Precompute tokenized captions
-            readable_classes = [
-                IMAGENETTE_LABELS[cls] for cls in self.classes
-            ]
+            readable_name = IMAGENETTE_LABELS[class_name]
 
             inputs = tokenizer(
-                readable_classes,
+                f"a photo of a {readable_name}",
                 max_length=tokenizer.model_max_length,
                 padding="max_length",
                 truncation=True,
                 return_tensors="pt"
             )
 
-            self.class_input_ids = inputs.input_ids
+            self.input_ids = inputs.input_ids[0]
 
         def __len__(self):
             return len(self.dataset)
 
         def __getitem__(self, idx):
-            img, label = self.dataset[idx]
-            input_ids = self.class_input_ids[label]
-
+            img, _ = self.dataset[idx]
             return {
                 "pixel_values": img,
-                "input_ids": input_ids
+                "input_ids": self.input_ids
             }
 
-    train_dataset = WrappedDataset(train_raw)
-    val_dataset = WrappedDataset(val_raw)
+    train_dataset = WrappedDataset(train_subset, class_name)
+    val_dataset = WrappedDataset(val_subset, class_name)
 
     train_loader = torch.utils.data.DataLoader(
-        train_dataset,
-        batch_size=20,
-        shuffle=False,
-        collate_fn=collate_fn
+        train_dataset, batch_size=10, shuffle=False, collate_fn=collate_fn
     )
 
     val_loader = torch.utils.data.DataLoader(
-        val_dataset,
-        batch_size=20,
-        shuffle=False,
-        collate_fn=collate_fn
+        val_dataset, batch_size=10, shuffle=False, collate_fn=collate_fn
     )
 
-    return train_dataset, val_dataset, train_loader, val_loader
+    return train_loader, val_loader
 
 def tokenize_captions(examples, is_train=True):
     captions = []
@@ -420,7 +418,6 @@ def get_reverse_denoise_results(pipe, dataloader, prefix='member'):
     weight_dtype = torch.float32
     mean_l2 = 0
     scores = []
-    all_scores = None
     for batch_idx, batch in enumerate(tqdm.tqdm(dataloader)):
         # Convert images to latent space
         pixel_values = batch["pixel_values"].to(weight_dtype)
@@ -435,29 +432,11 @@ def get_reverse_denoise_results(pipe, dataloader, prefix='member'):
             pipe(prompt=None, latents=latents, text_embeddings=encoder_hidden_states, guidance_scale=1.0)
 
         score = ((denoising_results[-15] - reverse_results[14]) ** 2).sum()
-        
-        reverse_denoising_results= denoising_results[::-1]
-        score_all_levels = [
-            ((reverse_denoising_results[i] - reverse_results[i]) ** 2)
-                .sum(dim=(1, 2, 3)).detach().cpu()   # sum over C,H,W only
-            for i in range(len(reverse_denoising_results))
-        ]
-        score_all_levels = torch.stack(score_all_levels, dim=0)  
-        if all_scores is None:
-            all_scores = score_all_levels
-        else:
-            all_scores = torch.cat([all_scores, score_all_levels], dim=1)
-        # score_all_levels = torch.stack(score_all_levels, dim=1)
-
-        
-        
         scores.append(score.reshape(-1, 1))
         mean_l2 += score
         print(f'[{batch_idx}/{len(dataloader)}] mean l2-sum: {mean_l2 / (batch_idx + 1):.8f}')
 
-        
-   
-    return torch.concat(scores).reshape(-1), all_scores
+    return torch.concat(scores).reshape(-1)
 
 
 def main(args):
@@ -467,58 +446,91 @@ def main(args):
         _, _, _, test_loader = load_coco_datasets(args.dataset_root)
         _, train_loader = load_laion_dataset(args.dataset_root)
     elif args.dataset == 'imagenette':
-        _, _, train_loader, test_loader = load_imagenette_datasets(args.dataset_root)
+
+        pipe = load_pipeline_unet(args.ckpt_path, args.unet_path, device=args.device)
+
+        results = {}
+
+        for wnid, class_name in IMAGENETTE_LABELS.items():
+
+            print(f"\n==============================")
+            print(f"Evaluating class: {class_name}")
+            print(f"==============================")
+
+            train_loader, test_loader = load_imagenette_datasets(
+                args.dataset_root,
+                class_name=wnid,
+                num_samples=50
+            )
+
+            member_scores = get_reverse_denoise_results(pipe, train_loader)
+            nonmember_scores = get_reverse_denoise_results(pipe, test_loader)
+
+            labels = torch.cat([
+                torch.ones_like(member_scores),
+                torch.zeros_like(nonmember_scores)
+            ])
+
+            scores = torch.cat([member_scores, nonmember_scores])
+
+            fpr, tpr, thresholds = metrics.roc_curve(
+                labels.cpu().numpy(),
+                -scores.cpu().numpy()  # negative because lower = more member-like
+            )
+
+            auc = metrics.auc(fpr, tpr)
+
+            print(f"Class: {class_name}  |  AUROC: {auc:.4f}")
+
+            results[class_name] = auc
+
+        print("\n==============================")
+        print("FINAL PER-CLASS RESULTS")
+        print("==============================")
+
+        for cls, auc in results.items():
+            print(f"{cls:20s}: {auc:.4f}")
+
+        print(f"\nMean AUROC: {np.mean(list(results.values())):.4f}")
+
+        return
+    
     else:
+        
         raise NotImplementedError
 
     pipe = load_pipeline_unet(args.ckpt_path, args.unet_path, device=args.device)
 
-    member_scores,member_all_scores = get_reverse_denoise_results(pipe, train_loader)
-    nonmember_scores,nonmember_all_scores = get_reverse_denoise_results(pipe, test_loader)
+    member_scores = get_reverse_denoise_results(pipe, train_loader)
+    nonmember_scores = get_reverse_denoise_results(pipe, test_loader)
 
-    def find_AUC(member_scores, nonmember_scores):
-        min_score = min(member_scores.min(), nonmember_scores.min())
-        max_score = max(member_scores.max(), nonmember_scores.max())
+    min_score = min(member_scores.min(), nonmember_scores.min())
+    max_score = max(member_scores.max(), nonmember_scores.max())
 
-        TPR_list = []
-        FPR_list = []
+    TPR_list = []
+    FPR_list = []
 
-        total = member_scores.size(0) + nonmember_scores.size(0)
+    total = member_scores.size(0) + nonmember_scores.size(0)
 
-        for threshold in torch.range(min_score, max_score, (max_score - min_score) / 10000):
-            acc = ((member_scores <= threshold).sum() + (nonmember_scores > threshold).sum()) / total
+    for threshold in torch.range(min_score, max_score, (max_score - min_score) / 10000):
+        acc = ((member_scores <= threshold).sum() + (nonmember_scores > threshold).sum()) / total
 
-            TP = (member_scores <= threshold).sum()
-            TN = (nonmember_scores > threshold).sum()
-            FP = (nonmember_scores <= threshold).sum()
-            FN = (member_scores > threshold).sum()
+        TP = (member_scores <= threshold).sum()
+        TN = (nonmember_scores > threshold).sum()
+        FP = (nonmember_scores <= threshold).sum()
+        FN = (member_scores > threshold).sum()
 
-            TPR = TP / (TP + FN)
-            FPR = FP / (FP + TN)
+        TPR = TP / (TP + FN)
+        FPR = FP / (FP + TN)
 
-            TPR_list.append(TPR.item())
-            FPR_list.append(FPR.item())
+        TPR_list.append(TPR.item())
+        FPR_list.append(FPR.item())
 
-            # print(f'Score threshold = {threshold:.16f} \t ASR: {acc:.8f} \t TPR: {TPR:.8f} \t FPR: {FPR:.8f}')
-        auc = metrics.auc(np.asarray(FPR_list), np.asarray(TPR_list))
-        print(f'AUROC: {auc}')
-        return auc
-    
-    original_auc = find_AUC(member_scores, nonmember_scores)
-    print(f'AUROC for Original: {original_auc}')
+        print(f'Score threshold = {threshold:.16f} \t ASR: {acc:.8f} \t TPR: {TPR:.8f} \t FPR: {FPR:.8f}')
+    auc = metrics.auc(np.asarray(FPR_list), np.asarray(TPR_list))
+    print(f'AUROC: {auc}')
 
-    
-    for i in range(member_all_scores.shape[0]):
-        auc=find_AUC(member_all_scores[i], nonmember_all_scores[i])
-        print(f'AUROC for Level {i}: {auc}')
-    avg_member_all_scores = member_all_scores.mean(dim=0)
-    avg_nonmember_all_scores = nonmember_all_scores.mean(dim=0)
-    auc=find_AUC(avg_member_all_scores, avg_nonmember_all_scores)
-    print(f'AUROC for Average All Levels: {auc}')
 
-    # save member_all_scores and nonmember_all_scores
-    torch.save(member_all_scores, os.path.join('/egr/research-sprintai/baliahsa/projects/SecMI-LDM/Analysis', 'member_all_scores.pt'))
-    torch.save(nonmember_all_scores, os.path.join('/egr/research-sprintai/baliahsa/projects/SecMI-LDM/Analysis', 'nonmember_all_scores.pt'))
 
 def fix_seed(seed):
     torch.manual_seed(seed)
@@ -531,7 +543,7 @@ def fix_seed(seed):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', default='laion',
+    parser.add_argument('--dataset', default='pokemon',
                     choices=['pokemon', 'laion', 'imagenette'])
     parser.add_argument('--dataset-root', default='dataset/Datasets-Vision/SecMI-LDM-Data/datasets', type=str)
     parser.add_argument('--seed', type=int, default=10)

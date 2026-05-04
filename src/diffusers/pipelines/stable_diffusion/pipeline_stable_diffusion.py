@@ -518,6 +518,7 @@ class StableDiffusionPipeline(DiffusionPipeline):
 
         timesteps = list(reversed(timesteps))
         denoising_results = []
+        # breakpoint()
         for i, t in enumerate(timesteps[:-1]):
 
             latents = reverse_results[len(reverse_results) - 1 - i]
@@ -542,3 +543,5 @@ class StableDiffusionPipeline(DiffusionPipeline):
         image = self.decode_latents(latents)
 
         return image, reverse_results, denoising_results
+    
+    
