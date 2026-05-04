@@ -1,54 +1,79 @@
+# Does Concept Erasure in Diffusion Models Remove Training Data Membership Signals?
+### (CSE 895 Course Project)
 
-## SecMI on Latent Diffusion Models
+This project investigates whether **concept erasure methods in diffusion models** effectively remove **training data membership signals**, focusing on Membership Inference Attacks (MIA).
 
+---
 
+## Overview
 
-We have modified the following files in order to perform SecMI:
-```shell
-# Implement reverse in DDIM
-./src/diffusers/schedulers/scheduling_ddim.py
-# Save reverse and denoising intermediate results
-./src/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion.py
-```
+We extend the SecMI framework to analyze:
 
-### Dataset
-Please download datasets from [here](https://drexel0-my.sharepoint.com/:u:/g/personal/jd3734_drexel_edu/EeEwxOQ-5cZEnf534S6WRkQBOcvbAtfmuV-h5UjyIF8YxQ?e=JYAHfo) and `unzip` it.
+- Concept erasure using ESD (Erased Stable Diffusion)
+- Our method: ESD + MIA-aware erasure
+- Membership inference using ClID
+- Attack Success Rate (ASR)
 
-There are three datasets included: [Pokemon](https://huggingface.co/datasets/lambdalabs/pokemon-blip-captions), [Laion](https://laion.ai/blog/laion-5b/) (2.5k), and [coco2017val](https://cocodataset.org/#home) (2.5k).
+---
 
-### SecMI w/ Stable Diffusion fine-tuned over the Pokemon dataset
+## Environment Setup
 
-#### Checkpoint
-Please download the Pokemon-fine-tuned SD from [here](https://drexel0-my.sharepoint.com/:u:/g/personal/jd3734_drexel_edu/EYX4y5AgG9ZMjbSUvd0Oc3MBRaSBmZTqZjAVkOoG6kjIEw?e=M66BHj) and `unzip` it.
+Same as SecMI-LDM.
 
-#### Script
-Please refer to the following script or run `sh scripts/secmi_ldm_pokemon.sh`
-```shell
-CUDA_VISIBLE_DEVICES=0 python -m src.mia.secmi \
---dataset pokemon \
---dataset-root /path/to/datasets \
---ckpt-path /path/to/sd-pokemon-checkpoint
-```
+---
 
-### SecMI w/ vanilla Stable Diffusion over Laion (as member) and coco2017val (as non-member)
+## Dataset
 
-#### Script
-Please refer to the following script or run `sh scripts/secmi_sd_laion.sh`
-```shell
-CUDA_VISIBLE_DEVICES=0 python -m src.mia.secmi \
---dataset laion \
---dataset-root /path/to/datasets \
---ckpt-path runwayml/stable-diffusion-v1-5
-```
+Use Imagenette dataset.
 
-### Reference
-Please cite our paper if you feel this is helpful:
-```
-@InProceedings{duan2023are,
-  title = {Are Diffusion Models Vulnerable to Membership Inference Attacks?},
-  author = {Duan, Jinhao and Kong, Fei and Wang, Shiqi and Shi, Xiaoshuang and Xu, Kaidi},
-  booktitle = {Proceedings of the 40th International Conference on Machine Learning},
-  pages = {8717--8730},
-  year = {2023}
-}
-```
+---
+
+## Caption Generation
+
+BLIP:
+    python generate_images_blip_caption.py
+
+LLaVA:
+    python generate_images_llava_caption.py
+
+---
+
+## Training
+
+    sh train.sh
+
+---
+
+## Concept Erasure
+
+ESD:
+    python esd_erase.py
+
+ESD + MIA:
+    python esd_erase_with_mia.py
+or
+    sh erase.sh
+
+---
+
+## Evaluation
+
+ClID MIA:
+    sh clid.sh
+
+Run all:
+    sh Final_run_all.sh
+
+ASR:
+    sh eval_accuracy.sh
+
+---
+
+## Workflow
+
+1. Prepare dataset
+2. Generate captions
+3. Train model
+4. Apply erasure
+5. Evaluate MIA
+6. Compute ASR

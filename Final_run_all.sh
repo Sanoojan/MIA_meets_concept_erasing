@@ -52,47 +52,47 @@ wait_for_batch() {
   fi
 }
 
-# echo "=============================="
-# echo "Training 6 ESD+MIA checkpoints"
-# echo "=============================="
+echo "=============================="
+echo "Training 6 ESD+MIA checkpoints"
+echo "=============================="
 
-# job_idx=0
-# for concept in "${CONCEPTS[@]}"; do
-#   concept_slug="$(slugify "$concept")"
+job_idx=0
+for concept in "${CONCEPTS[@]}"; do
+  concept_slug="$(slugify "$concept")"
 
-#   for caption_idx in "${!CAPTION_TAGS[@]}"; do
-#     caption_tag="${CAPTION_TAGS[$caption_idx]}"
-#     caption_file="${CAPTION_FILES[$caption_idx]}"
-#     gpu="${GPUS[$((job_idx % ${#GPUS[@]}))]}"
+  for caption_idx in "${!CAPTION_TAGS[@]}"; do
+    caption_tag="${CAPTION_TAGS[$caption_idx]}"
+    caption_file="${CAPTION_FILES[$caption_idx]}"
+    gpu="${GPUS[$((job_idx % ${#GPUS[@]}))]}"
 
-#     output_dir="$CHECKPOINT_DIR/final_${caption_tag}_${TRAIN_METHOD//-/_}_${concept_slug}_mia"
-#     train_log="$TRAIN_LOG_DIR/final_${caption_tag}_${TRAIN_METHOD//-/_}_${concept_slug}_mia.log"
+    output_dir="$CHECKPOINT_DIR/final_${caption_tag}_${TRAIN_METHOD//-/_}_${concept_slug}_mia"
+    train_log="$TRAIN_LOG_DIR/final_${caption_tag}_${TRAIN_METHOD//-/_}_${concept_slug}_mia.log"
 
-#     echo "[$(date)] Train: concept='$concept' captions='$caption_tag' gpu=$gpu"
-#     CUDA_VISIBLE_DEVICES="$gpu" python esd_erase_with_mia.py \
-#       --erase_concept "$concept" \
-#       --pipeline_path "$PIPELINE_PATH" \
-#       --dataset_root "$DATASET_ROOT" \
-#       --caption_json "$caption_file" \
-#       --output_dir "$output_dir" \
-#       --train_method "$TRAIN_METHOD" \
-#       --iterations "$ITERATIONS" \
-#       --learning_rate "$LR" \
-#       --mia_lambda "$MIA_LAMBDA" \
-#       --mia_timesteps_per_sample "$MIA_TIMESTEPS_PER_SAMPLE" \
-#       --mia_partials_per_sample "$MIA_PARTIALS_PER_SAMPLE" \
-#       --device cuda:0 \
-#       > "$train_log" 2>&1 &
+    echo "[$(date)] Train: concept='$concept' captions='$caption_tag' gpu=$gpu"
+    CUDA_VISIBLE_DEVICES="$gpu" python esd_erase_with_mia.py \
+      --erase_concept "$concept" \
+      --pipeline_path "$PIPELINE_PATH" \
+      --dataset_root "$DATASET_ROOT" \
+      --caption_json "$caption_file" \
+      --output_dir "$output_dir" \
+      --train_method "$TRAIN_METHOD" \
+      --iterations "$ITERATIONS" \
+      --learning_rate "$LR" \
+      --mia_lambda "$MIA_LAMBDA" \
+      --mia_timesteps_per_sample "$MIA_TIMESTEPS_PER_SAMPLE" \
+      --mia_partials_per_sample "$MIA_PARTIALS_PER_SAMPLE" \
+      --device cuda:0 \
+      > "$train_log" 2>&1 &
 
-#     pids+=("$!")
-#     job_idx=$((job_idx + 1))
+    pids+=("$!")
+    job_idx=$((job_idx + 1))
 
-#     if [[ "${#pids[@]}" -eq "${#GPUS[@]}" ]]; then
-#       wait_for_batch
-#     fi
-#   done
-# done
-# wait_for_batch
+    if [[ "${#pids[@]}" -eq "${#GPUS[@]}" ]]; then
+      wait_for_batch
+    fi
+  done
+done
+wait_for_batch
 
 echo "=============================="
 echo "Running 12 CLID evaluations"
